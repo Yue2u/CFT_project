@@ -1,0 +1,30 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CTF task | Сколько цветных пикселей?</title>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="image-container">
+        <img src="{{ image_url }}" alt="Upload your photo" style ="height:50%;width: 50%" class="image-preview"><br>
+        <h4>{{ pixel_color }} пикселей больше на {{ black_while_diff }}</h4>
+    </div>
+    <div class="container-1">
+        <form action="upload/" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form }}<br>
+            {% if hex_color_requested %}
+                <h4>Найдено {{ hex_color_count }} пикселей цвета {{ hex_color }}</h4>
+            {% endif %}
+            <button type="submit">Submit</button>
+        </form>
+
+    </div>
+
+</body>
+</html>
