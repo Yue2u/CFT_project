@@ -9,6 +9,9 @@ from .log import log_upload_image, log_count_hex
 
 def main_view(request):
     image_url = request.session.get('last_saved_image', '/static/your_photo_here.png')
+    if not ImageHolder.objects.filter(image_path=image_url).values():
+        image_url = '/static/your_photo_here.png'
+
     form = ImageForm()
 
     white_count, black_count = black_white_diff(image_url)
@@ -36,8 +39,10 @@ def file_upload_view(request):
             user_ip = get_client_ip(request)
 
             if form.cleaned_data['document']:
-                saved_image = ImageHolder.objects.create(image=form.cleaned_data['document'],
-                                                         user_ip=user_ip)
+                saved_image = ImageHolder.objects.create(image=form.cleaned_data['document'], user_ip=user_ip)
+                ImageHolder.objects.filter(user_ip=saved_image.user_ip,
+                                           upload_date=saved_image.upload_date).update(image_path=
+                                                                                       f'/media/{saved_image.image}')
 
                 request.session['last_saved_image'] = f'/media/{saved_image.image}'
 

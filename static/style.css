@@ -13,5 +13,5 @@ body {
 }
 
 .image-preview {
-    height: 50%;
+    max-height: 400px;
 }
